@@ -33,9 +33,23 @@ Puppet::Type.newtype(:gpubsub_topic) do
   @doc = 'A named resource to which messages are sent by publishers.'
 
   autorequire(:gauth_credential) do
-    credential = self[:credential]
-    raise "#{ref}: required property 'credential' is missing" if credential.nil?
-    [credential]
+    if self[:ensure] == :present
+      credential = self[:credential]
+      raise "#{ref}: required property 'credential' is missing" if credential.nil?
+      [credential]
+    else
+      []
+    end
+  end
+
+  autobefore(:gauth_credential) do
+    if self[:ensure] == :absent
+      credential = self[:credential]
+      raise "#{ref}: required property 'credential' is missing" if credential.nil?
+      [credential]
+    else
+      []
+    end
   end
 
   ensurable
