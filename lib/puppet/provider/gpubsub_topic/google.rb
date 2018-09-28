@@ -113,6 +113,7 @@ Puppet::Type.type(:gpubsub_topic).provide(:google) do
   end
 
   def exports
+    raise "Must fetch before accessing exported values." if @fetched.nil?
     {
       name: resource[:name]
     }
